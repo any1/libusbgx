@@ -78,6 +78,24 @@ int usbg_read_int(const char *path, const char *name, const char *file,
 	return ret;
 }
 
+int usbg_read_int64(const char *path, const char *name, const char *file,
+		  int base, int64_t *dest)
+{
+	char buf[USBG_MAX_STR_LENGTH];
+	char *pos;
+	int ret;
+
+	ret = usbg_read_buf(path, name, file, buf);
+	if (ret >= 0) {
+		ret = 0;
+		*dest = strtoll(buf, &pos, base);
+		if (!pos)
+			ret = USBG_ERROR_OTHER_ERROR;
+	}
+
+	return ret;
+}
+
 int usbg_read_bool(const char *path, const char *name,
 		   const char *file,  bool *dest)
 {
@@ -185,6 +203,24 @@ out:
 
 int usbg_write_int(const char *path, const char *name, const char *file,
 		   int value, const char *str)
+{
+	char buf[USBG_MAX_STR_LENGTH];
+	int nmb;
+	int ret;
+
+	nmb = snprintf(buf, USBG_MAX_STR_LENGTH, str, value);
+	if (nmb >= USBG_MAX_STR_LENGTH)
+		return USBG_ERROR_INVALID_PARAM;
+
+	ret = usbg_write_buf(path, name, file, buf, nmb);
+	if (ret > 0)
+		ret = 0;
+
+	return ret;
+}
+
+int usbg_write_int64(const char *path, const char *name, const char *file,
+		     int64_t value, const char *str)
 {
 	char buf[USBG_MAX_STR_LENGTH];
 	int nmb;

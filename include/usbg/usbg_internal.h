@@ -13,6 +13,8 @@
 #ifndef USBG_INTERNAL_H
 #define USBG_INTERNAL_H
 
+#include <stdint.h>
+#include <inttypes.h>
 #include <sys/queue.h>
 #include <string.h>
 #include <usbg/usbg.h>
@@ -232,7 +234,11 @@ int usbg_read_buf_limited(const char *path, const char *name,
 int usbg_read_int(const char *path, const char *name, const char *file,
 		  int base, int *dest);
 
+int usbg_read_int64(const char *path, const char *name, const char *file,
+		    int base, int64_t *dest);
+
 #define usbg_read_dec(p, n, f, d)	usbg_read_int(p, n, f, 10, d)
+#define usbg_read_dec64(p, n, f, d)	usbg_read_int64(p, n, f, 10, d)
 #define usbg_read_hex(p, n, f, d)	usbg_read_int(p, n, f, 16, d)
 
 int usbg_read_bool(const char *path, const char *name,
@@ -253,7 +259,11 @@ int usbg_write_buf(const char *path, const char *name,
 int usbg_write_int(const char *path, const char *name, const char *file,
 		   int value, const char *str);
 
+int usbg_write_int64(const char *path, const char *name, const char *file,
+		     int64_t value, const char *str);
+
 #define usbg_write_dec(p, n, f, v)	usbg_write_int(p, n, f, v, "%d\n")
+#define usbg_write_dec64(p, n, f, v)	usbg_write_int64(p, n, f, v, "%" PRId64 "\n")
 #define usbg_write_hex(p, n, f, v)	usbg_write_int(p, n, f, v, "0x%x\n")
 #define usbg_write_hex16(p, n, f, v)	usbg_write_int(p, n, f, v, "0x%04x\n")
 #define usbg_write_hex8(p, n, f, v)	usbg_write_int(p, n, f, v, "0x%02x\n")
@@ -330,10 +340,22 @@ static inline int usbg_get_dec(const char *path, const char *name,
 	return usbg_read_dec(path, name, attr, (int *)val);
 }
 
+static inline int usbg_get_dec64(const char *path, const char *name,
+			   const char *attr, void *val)
+{
+	return usbg_read_dec64(path, name, attr, (int64_t *)val);
+}
+
 static inline int usbg_set_dec(const char *path, const char *name,
 			   const char *attr, void *val)
 {
 	return usbg_write_dec(path, name, attr, *((int *)val));
+}
+
+static inline int usbg_set_dec64(const char *path, const char *name,
+			   const char *attr, void *val)
+{
+	return usbg_write_dec64(path, name, attr, *((int64_t *)val));
 }
 
 static inline int usbg_get_bool(const char *path, const char *name,
