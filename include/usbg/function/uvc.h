@@ -14,6 +14,7 @@
 #define USBG_FUNCTION_UVC__
 
 #include <usbg/usbg.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,9 +35,9 @@ struct usbg_f_uvc_frame_attrs
 {
 	int bFrameIndex;
 	int bmCapabilities;
-	int dwMinBitRate;
-	int dwMaxBitRate;
-	int dwMaxVideoFrameBufferSize;
+	int64_t dwMinBitRate;
+	int64_t dwMaxBitRate;
+	int64_t dwMaxVideoFrameBufferSize;
 	int dwDefaultFrameInterval;
 	int dwFrameInterval;
 	int wWidth;
@@ -103,9 +104,9 @@ union usbg_f_uvc_config_attr_val {
 
 union usbg_f_uvc_frame_attr_val {
 	int bmCapabilities;
-	int dwMinBitRate;
-	int dwMaxBitRate;
-	int dwMaxVideoFrameBufferSize;
+	int64_t dwMinBitRate;
+	int64_t dwMaxBitRate;
+	int64_t dwMaxVideoFrameBufferSize;
 	int dwDefaultFrameInterval;
 	int dwFrameInterval;
 	int wWidth;

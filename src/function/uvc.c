@@ -98,6 +98,16 @@ struct {
 		.export = usbg_set_config_node_int,		        \
 	}
 
+#define UVC_DEC64_ATTR(_name)						\
+	{								\
+		.name = #_name,						\
+		.offset = offsetof(struct usbg_f_uvc_frame_attrs, _name),     \
+		.get = usbg_get_dec,				        \
+		.set = usbg_set_dec,				        \
+		.import = usbg_get_config_node_int,	                \
+		.export = usbg_set_config_node_int,		        \
+	}
+
 struct {
 	const char *name;
 	size_t offset;
@@ -108,15 +118,16 @@ struct {
 } uvc_frame_attr[USBG_F_UVC_FRAME_ATTR_MAX] = {
 	[USBG_F_UVC_FRAME_INDEX] = UVC_DEC_ATTR(bFrameIndex),
 	[USBG_F_UVC_FRAME_CAPABILITIES] = UVC_DEC_ATTR(bmCapabilities),
-	[USBG_F_UVC_FRAME_MIN_BITRATE] = UVC_DEC_ATTR(dwMinBitRate),
-	[USBG_F_UVC_FRAME_MAX_BITRATE] = UVC_DEC_ATTR(dwMaxBitRate),
-	[USBG_F_UVC_FRAME_MAX_VIDEO_BUFFERSIZE] = UVC_DEC_ATTR(dwMaxVideoFrameBufferSize),
+	[USBG_F_UVC_FRAME_MIN_BITRATE] = UVC_DEC64_ATTR(dwMinBitRate),
+	[USBG_F_UVC_FRAME_MAX_BITRATE] = UVC_DEC64_ATTR(dwMaxBitRate),
+	[USBG_F_UVC_FRAME_MAX_VIDEO_BUFFERSIZE] = UVC_DEC64_ATTR(dwMaxVideoFrameBufferSize),
 	[USBG_F_UVC_FRAME_DEFAULT_INTERVAL] = UVC_DEC_ATTR(dwDefaultFrameInterval),
 	[USBG_F_UVC_FRAME_INTERVAL] = UVC_DEC_ATTR(dwFrameInterval),
 	[USBG_F_UVC_FRAME_HEIGHT] = UVC_DEC_ATTR(wHeight),
 	[USBG_F_UVC_FRAME_WIDTH] = UVC_DEC_ATTR(wWidth),
 };
 
+#undef UVC_DEC64_ATTR
 #undef UVC_DEC_ATTR
 
 #define UVC_DEC_ATTR(_name)						\
